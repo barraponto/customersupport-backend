@@ -1,4 +1,5 @@
 import asyncio
+import os
 from typing import Any
 
 import streamlit as st
@@ -7,7 +8,11 @@ from langchain_core.messages import HumanMessage
 from agent import CustomerSupportAgent
 from agent import get_agent as build_agent
 from chats import get_configuration as build_configuration
-from mcp_client import client
+from mcp_client import get_client
+
+# @TODO: small hack to deploy on streamlit cloud
+if not os.environ.get("GROQ_API_KEY"):
+    os.environ["GROQ_API_KEY"] = st.secrets.get("GROQ_API_KEY") or ""
 
 
 @st.cache_data
@@ -17,6 +22,7 @@ def get_configuration():
 
 @st.cache_resource
 def get_agent(configuration: dict[str, Any]):
+    client = get_client(st.secrets.get("SHOP_MCP_SERVER_URL"))
     coroutine = build_agent(client)
     lc_agent = asyncio.run(coroutine)
     return CustomerSupportAgent(lc_agent, configuration)
