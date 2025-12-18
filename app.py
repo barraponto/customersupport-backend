@@ -57,7 +57,7 @@ if prompt := st.chat_input("Start a conversation with our customer support agent
     # Mock AI response (replace with your agent)
     response = asyncio.run(agent.query(prompt))
     with st.chat_message("assistant"):
-        st.markdown(response)
+        st.markdown(response.content)
 
     # Add assistant message to history
     st.session_state.messages.append(response)

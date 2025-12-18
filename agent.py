@@ -55,4 +55,4 @@ class CustomerSupportAgent:
                 "Sorry, I'm having trouble processing your request. Please try again."
             )
 
-        return response["messages"][-1].content
+        return response["messages"][-1]
